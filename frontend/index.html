@@ -101,6 +101,114 @@
       justify-content: center;
       padding: 0 4px;
     }
+
+    /* ===== Feed Header ===== */
+    .feed-header {
+      position: absolute; top: 0; width: 100%;
+      padding: 12px 16px;
+      background: rgba(10,10,15,0.6);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 10; display: flex; justify-content: space-between; align-items: center;
+    }
+    .feed-tabs { display: flex; gap: 16px; }
+    .feed-tab { font-size: 15px; color: var(--ink-secondary); cursor: pointer; }
+    .feed-tab.active { color: var(--ink-primary); font-weight: 600; }
+    .debug-toggle {
+      padding: 4px 12px; font-size: 12px;
+      background: rgba(255,255,255,0.1); color: var(--ink-secondary);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 12px;
+      cursor: pointer;
+    }
+
+    /* ===== Video Area ===== */
+    .video-area {
+      position: absolute; inset: 0;
+      transition: background 0.6s ease;
+    }
+    .video-watermark {
+      font-family: var(--font-serif); font-size: 24px;
+      color: var(--ink-secondary); opacity: 0.3;
+      text-align: center; position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%;
+    }
+
+    /* ===== Action Bar ===== */
+    .action-bar {
+      position: absolute; right: 16px; bottom: 160px;
+      display: flex; flex-direction: column; gap: 20px; z-index: 5;
+    }
+    .action-item {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer;
+    }
+    .action-item svg { width: 28px; height: 28px; }
+    .action-count { font-size: 11px; color: var(--ink-secondary); }
+
+    /* ===== Video Info ===== */
+    .video-info {
+      position: absolute; bottom: 72px; left: 16px; right: 72px; z-index: 5;
+    }
+    .video-author { font-size: 14px; color: var(--ink-primary); font-weight: 500; margin-bottom: 4px; }
+    .video-title { font-size: 13px; color: var(--ink-secondary); margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .video-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 12px; color: var(--accent-water); background: rgba(90,158,143,0.12); padding: 2px 8px; border-radius: 10px; }
+
+    /* ===== Card Glow ===== */
+    .card-glow {
+      position: absolute; bottom: 120px; left: 0; right: 0;
+      height: 80px; background: var(--accent-glow);
+      z-index: 15; animation: glowPulse 4s ease-in-out infinite;
+    }
+
+    /* ===== Flow Card ===== */
+    .flow-card {
+      position: absolute; bottom: 72px; left: 24px; right: 24px;
+      max-height: 60vh; padding: 24px 20px;
+      background: var(--card-paper);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 16px; z-index: 20;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .card-header { text-align: center; }
+    .card-title { font-size: 14px; color: var(--accent-gold); font-weight: 500; }
+    .card-subtitle { font-size: 12px; color: var(--ink-secondary); margin-top: 2px; }
+    .card-echo { font-family: var(--font-serif); font-size: 20px; line-height: 1.8; color: var(--ink-primary); text-align: center; padding: 8px 0; }
+    .card-source { font-size: 11px; color: var(--accent-gold); text-align: center; }
+    .card-actions { display: flex; gap: 12px; justify-content: center; margin-top: 4px; }
+    .btn-collect { padding: 8px 20px; background: var(--accent-water); color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .btn-leave { padding: 8px 20px; background: transparent; color: var(--accent-water); border: 1.5px solid var(--accent-water); border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .btn-dismiss { padding: 8px 12px; background: transparent; color: var(--ink-secondary); border: none; font-size: 13px; cursor: pointer; }
+
+    /* ===== Card Input Area ===== */
+    .card-input-area { display: flex; flex-direction: column; gap: 8px; }
+    .card-input-area textarea {
+      width: 100%; height: 80px; padding: 10px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+      color: var(--ink-primary); font-size: 14px; font-family: var(--font-sans); resize: none;
+    }
+    .card-input-area textarea::placeholder { color: var(--ink-secondary); }
+    .char-count { font-size: 12px; color: var(--ink-secondary); text-align: right; }
+    .char-count.warning { color: var(--accent-gold); }
+    .btn-submit { padding: 10px; background: var(--accent-water); color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%);
+      padding: 8px 24px; background: rgba(0,0,0,0.7);
+      color: var(--ink-primary); border-radius: 20px; font-size: 13px; z-index: 100;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes glowPulse { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.2; } }
+    .card-enter-active { animation: cardFloatIn 800ms ease-out; }
+    .card-leave-active { animation: cardFloatOut 600ms ease-in; }
+    @keyframes cardFloatIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes cardFloatOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
+    .expand-enter-active, .expand-leave-active { transition: max-height 0.4s ease, opacity 0.3s ease; max-height: 200px; overflow: hidden; }
+    .expand-enter-from, .expand-leave-to { max-height: 0; opacity: 0; }
+    .toast-enter-active, .toast-leave-active { transition: opacity 0.3s; }
+    .toast-enter-from, .toast-leave-to { opacity: 0; }
   </style>
 </head>
 <body>
@@ -109,7 +217,87 @@
     <!-- ===== Page: Feed ===== -->
     <div class="page page-feed" v-show="currentTab === 'feed'"
          @touchstart="onTouchStart" @touchend="onTouchEnd">
-      <!-- Task 1 填充: 视频流全屏卡片 -->
+
+      <!-- Feed Header -->
+      <header class="feed-header">
+        <div class="feed-tabs">
+          <span class="feed-tab">推荐</span>
+          <span class="feed-tab">关注</span>
+          <span class="feed-tab active">流觞</span>
+        </div>
+        <button class="debug-toggle" @click="showDebug = !showDebug">调试</button>
+      </header>
+
+      <!-- Video Area -->
+      <div class="video-area" :style="{ background: currentVideo.gradient }">
+        <div class="video-watermark">{{ currentVideo.title }}</div>
+      </div>
+
+      <!-- Right Action Bar -->
+      <div class="action-bar">
+        <div class="action-item" @click="currentVideo.liked = !currentVideo.liked">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" :style="{ color: currentVideo.liked ? 'var(--ink-primary)' : 'var(--ink-secondary)' }">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+          <span class="action-count">{{ formatCount(currentVideo.likes) }}</span>
+        </div>
+        <div class="action-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-secondary)">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="action-count">{{ formatCount(currentVideo.comments) }}</span>
+        </div>
+        <div class="action-item" @click="currentVideo.favorited = !currentVideo.favorited">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" :style="{ color: currentVideo.favorited ? 'var(--ink-primary)' : 'var(--ink-secondary)' }">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span class="action-count">收藏</span>
+        </div>
+        <div class="action-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--ink-secondary)">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          <span class="action-count">分享</span>
+        </div>
+      </div>
+
+      <!-- Video Info -->
+      <div class="video-info">
+        <div class="video-author">@{{ currentVideo.author }}</div>
+        <div class="video-title">{{ currentVideo.title }}</div>
+        <div class="video-tags">
+          <span class="tag" v-for="tag in currentVideo.tags">#{{ tag }}</span>
+        </div>
+      </div>
+
+      <!-- Card Glow -->
+      <div class="card-glow" v-if="showGlow && !showCard"></div>
+
+      <!-- Flow Card -->
+      <transition name="card">
+        <div class="flow-card" v-if="showCard" @touchstart.stop @touchmove.stop>
+          <div class="card-header">
+            <div class="card-title">{{ currentCard.title }}</div>
+            <div class="card-subtitle">{{ currentCard.subtitle }}</div>
+          </div>
+          <div class="card-echo">"{{ currentCard.echoText }}"</div>
+          <div class="card-source">{{ currentCard.sourceLine }}</div>
+          <transition name="expand">
+            <div class="card-input-area" v-if="showInput">
+              <textarea v-model="userText" maxlength="60" placeholder="给后来刷到这里的人留一句..."></textarea>
+              <div class="char-count" :class="{ warning: userText.length > 50 }">剩余 {{ 60 - userText.length }} 字</div>
+              <button class="btn-submit" @click="submitEcho">放下这句</button>
+            </div>
+          </transition>
+          <div class="card-actions" v-if="!showInput">
+            <button class="btn-collect" @click="collectCard">收下</button>
+            <button class="btn-leave" @click="showInput = true">留一句</button>
+            <button class="btn-dismiss" @click="dismissCard">继续刷</button>
+          </div>
+        </div>
+      </transition>
+
     </div>
 
     <!-- ===== Page: Upstream ===== -->
@@ -148,6 +336,11 @@
         <span class="tab-label">我的</span>
       </div>
     </nav>
+
+    <!-- Toast -->
+    <transition name="toast">
+      <div class="toast" v-if="toastVisible">{{ toastMsg }}</div>
+    </transition>
 
   </div>
 
@@ -255,12 +448,62 @@
         resetDwellTimer() {
           this.dwellSeconds = 0;
           clearInterval(this.dwellTimer);
-          this.dwellTimer = setInterval(() => { this.dwellSeconds++; }, 1000);
+          this.dwellTimer = setInterval(() => { this.dwellSeconds++; this.checkTrigger(); }, 1000);
         },
         formatCount(n) { return n >= 10000 ? (n / 10000).toFixed(1) + 'w' : n; },
         getEcho(id) { return this.echoes.find(e => e.id === id) || {}; },
         getTopicName(id) { const t = this.topics.find(t => t.id === id); return t ? t.name : ''; },
-        goToTopic(topicId) { this.selectedTopicId = topicId; this.currentTab = 'upstream'; }
+        goToTopic(topicId) { this.selectedTopicId = topicId; this.currentTab = 'upstream'; },
+        checkTrigger() {
+          if (this.showCard) return;
+          const topic = this.currentVideo.topicId;
+          const sameTopicViewed = this.videos.slice(0, this.currentVideoIndex + 1).filter(v => v.topicId === topic).length;
+          if (this.dwellSeconds >= 8 && sameTopicViewed >= 2) {
+            this.triggerCard();
+          }
+        },
+        triggerCard() {
+          const topicEchoes = this.echoes.filter(e => e.topicId === this.currentVideo.topicId);
+          const echo = topicEchoes[Math.floor(Math.random() * topicEchoes.length)];
+          this.currentCard = {
+            title: '上游来信',
+            subtitle: '你在这条河边停了一会儿。',
+            echoText: echo.text,
+            sourceLine: '来自 ' + echo.ageDays + ' 天前的一次停留',
+            echoId: echo.id,
+            topicId: this.currentVideo.topicId,
+            tags: echo.tags
+          };
+          this.showGlow = true;
+          setTimeout(() => { this.showCard = true; }, 400);
+        },
+        collectCard() {
+          this.collectedCards.push({ ...this.currentCard, collectedAt: '刚刚' });
+          const topic = this.currentCard.topicId;
+          this.topicVisits[topic] = (this.topicVisits[topic] || 0) + 1;
+          this.collectedCount++;
+          this.dismissCard();
+          this.showToast('已收下');
+        },
+        submitEcho() {
+          if (!this.userText.trim()) return;
+          this.myEchoes.push({ text: this.userText.trim(), topicId: this.currentCard.topicId, receivedCount: Math.floor(Math.random() * 5) });
+          this.userText = '';
+          this.dismissCard();
+          this.showToast('这句话会漂向后来者');
+        },
+        dismissCard() {
+          this.showCard = false;
+          this.showGlow = false;
+          this.showInput = false;
+          this.currentCard = null;
+          this.resetDwellTimer();
+        },
+        showToast(msg) {
+          this.toastMsg = msg;
+          this.toastVisible = true;
+          setTimeout(() => { this.toastVisible = false; }, 2000);
+        }
       },
       mounted() { this.resetDwellTimer(); }
     }).mount('#app');
