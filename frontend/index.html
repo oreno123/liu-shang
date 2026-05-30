@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>流觞</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <style>
+    :root {
+      --bg-void: #0a0a0f;
+      --bg-deep: #141419;
+      --card-paper: rgba(245,240,230,0.12);
+      --card-paper-solid: #f5f0e6;
+      --ink-primary: #e8e0d0;
+      --ink-secondary: rgba(232,224,208,0.6);
+      --accent-water: #5a9e8f;
+      --accent-gold: #c9a96e;
+      --accent-glow: rgba(90,158,143,0.15);
+      --font-serif: "Noto Serif SC", "Songti SC", Georgia, serif;
+      --font-sans: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; font-family: var(--font-sans); background: #000; }
+    #app {
+      max-width: 430px; margin: 0 auto; height: 100vh;
+      position: relative; overflow: hidden; background: var(--bg-deep);
+    }
+
+    /* ===== Page Containers ===== */
+    .page {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .page-feed {
+      background: var(--bg-void);
+    }
+    .page-upstream,
+    .page-mine {
+      background: var(--card-paper-solid);
+    }
+
+    /* ===== Bottom Tab Bar ===== */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      background: rgba(10,10,15,0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(232,224,208,0.08);
+      z-index: 100;
+    }
+    .tab-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-item svg {
+      width: 24px;
+      height: 24px;
+      transition: color 0.2s;
+    }
+    .tab-item .tab-label {
+      font-size: 10px;
+      color: var(--ink-secondary);
+      transition: color 0.2s;
+    }
+    .tab-item.active svg {
+      color: var(--accent-water);
+    }
+    .tab-item.active .tab-label {
+      color: var(--accent-water);
+    }
+    .tab-item .badge {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      background: var(--accent-water);
+      color: var(--bg-void);
+      font-size: 9px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== Page: Feed ===== -->
+    <div class="page page-feed" v-show="currentTab === 'feed'"
+         @touchstart="onTouchStart" @touchend="onTouchEnd">
+      <!-- Task 1 填充: 视频流全屏卡片 -->
+    </div>
+
+    <!-- ===== Page: Upstream ===== -->
+    <div class="page page-upstream" v-show="currentTab === 'upstream'">
+      <!-- Task 2 填充: 回声流 + 主题选择 -->
+    </div>
+
+    <!-- ===== Page: Mine ===== -->
+    <div class="page page-mine" v-show="currentTab === 'mine'">
+      <!-- Task 3 填充: 个人收藏 + 已发送回声 -->
+    </div>
+
+    <!-- ===== Bottom Tab Bar ===== -->
+    <nav class="tab-bar">
+      <div class="tab-item" :class="{ active: currentTab === 'feed' }" @click="currentTab = 'feed'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="6,3 20,12 6,21"/>
+        </svg>
+        <span class="tab-label">视频流</span>
+        <span class="badge" v-if="collectedCount > 0">{{ collectedCount }}</span>
+      </div>
+
+      <div class="tab-item" :class="{ active: currentTab === 'upstream' }" @click="currentTab = 'upstream'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12 C4 8, 6 16, 8 12 S12 8, 14 12 S18 16, 20 12"/>
+          <path d="M2 16 C4 12, 6 20, 8 16 S12 12, 14 16 S18 20, 20 16"/>
+        </svg>
+        <span class="tab-label">上游</span>
+      </div>
+
+      <div class="tab-item" :class="{ active: currentTab === 'mine' }" @click="currentTab = 'mine'">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20 C4 16, 8 14, 12 14 S20 16, 20 20"/>
+        </svg>
+        <span class="tab-label">我的</span>
+      </div>
+    </nav>
+
+  </div>
+
+  <script>
+    // ===== Seed Data =====
+    const topics = [
+      { id: 'homecoming', name: '归乡', keywords: ['久别', '远行', '回家'] },
+      { id: 'oldfriend', name: '旧友', keywords: ['怀念', '告别', '天气'] },
+      { id: 'tired', name: '疲惫', keywords: ['沉默', '喘息', '释然'] },
+      { id: 'growth', name: '成长', keywords: ['离开', '害怕', '弄丢'] },
+      { id: 'city', name: '城市', keywords: ['记忆', '深夜', '无处说'] }
+    ];
+
+    const videos = [
+      { id: 'v1', title: '为什么奥德修斯的归途用了十年', author: '海边的古典课', topicId: 'homecoming', tags: ['归乡', '远行', '久别'], gradient: 'linear-gradient(135deg, #0d1b3e 0%, #2a1040 100%)', likes: 123000, comments: 842 },
+      { id: 'v2', title: '毕业后再也没回去过的那座小城', author: '北漂实录', topicId: 'homecoming', tags: ['归乡', '回家', '怀念'], gradient: 'linear-gradient(135deg, #0f1e3c 0%, #1a0a2e 100%)', likes: 89000, comments: 1203 },
+      { id: 'v3', title: '真正的告别常常没有像样的句号', author: '深夜书桌', topicId: 'oldfriend', tags: ['旧友', '告别', '怀念'], gradient: 'linear-gradient(135deg, #2a1a0e 0%, #1a1a1a 100%)', likes: 67000, comments: 534 },
+      { id: 'v4', title: '那些年我们以为会一直在一起的人', author: '旧时光放映室', topicId: 'oldfriend', tags: ['旧友', '青春', '错失'], gradient: 'linear-gradient(135deg, #2d1f12 0%, #1e1e1e 100%)', likes: 95000, comments: 1567 },
+      { id: 'v5', title: '那天我没有崩溃只是不想解释了', author: '打工人的深夜', topicId: 'tired', tags: ['疲惫', '沉默', '释然'], gradient: 'linear-gradient(135deg, #0a2a1a 0%, #0a1a2a 100%)', likes: 156000, comments: 2341 },
+      { id: 'v6', title: '把所有事都做完也没有觉得轻松', author: '城市生存指南', topicId: 'tired', tags: ['疲惫', '喘息', '释然'], gradient: 'linear-gradient(135deg, #0d2d1a 0%, #0d1a2d 100%)', likes: 78000, comments: 989 },
+      { id: 'v7', title: '那时候我以为离开会让我变成另一个人', author: '人生实验', topicId: 'growth', tags: ['成长', '离开', '害怕'], gradient: 'linear-gradient(135deg, #0a2a2a 0%, #1a0a2a 100%)', likes: 45000, comments: 312 },
+      { id: 'v8', title: '长大不是变厉害是承认自己也会怕', author: '三十岁前', topicId: 'growth', tags: ['成长', '害怕', '弄丢'], gradient: 'linear-gradient(135deg, #0d2d2d 0%, #2a0d2d 100%)', likes: 112000, comments: 1876 },
+      { id: 'v9', title: '很晚的地铁里突然想起一个很早以前的人', author: '末班车电台', topicId: 'city', tags: ['城市', '深夜', '记忆'], gradient: 'linear-gradient(135deg, #1a1a1a 0%, #2a1a0a 100%)', likes: 134000, comments: 2104 },
+      { id: 'v10', title: '不是这个城市冷是有些话不知道该发给谁', author: '城市夜归人', topicId: 'city', tags: ['城市', '深夜', '无处说'], gradient: 'linear-gradient(135deg, #1e1e1e 0%, #2d1e0d 100%)', likes: 98000, comments: 1456 }
+    ];
+
+    const echoes = [
+      { id: 'e1', text: '我也是很久以后才发现，所谓回家，不一定是回到一个地方。', topicId: 'homecoming', tags: ['归乡', '久别', '释然'], ageDays: 127 },
+      { id: 'e2', text: '有些地方回不去，但它一直在我身上。', topicId: 'homecoming', tags: ['归乡', '远行'], ageDays: 89 },
+      { id: 'e3', text: '我以为我在找路，后来才知道我是在确认自己还想回去。', topicId: 'homecoming', tags: ['归乡', '远行'], ageDays: 56 },
+      { id: 'e4', text: '有些人不是断了联系，只是停在了某个不会再更新的下午。', topicId: 'oldfriend', tags: ['旧友', '怀念'], ageDays: 203 },
+      { id: 'e5', text: '我后来很少想起他，但一想起，就是很多年前的天气。', topicId: 'oldfriend', tags: ['旧友', '怀念'], ageDays: 91 },
+      { id: 'e6', text: '原来真正的告别，常常没有一个像样的句号。', topicId: 'oldfriend', tags: ['旧友', '告别'], ageDays: 342 },
+      { id: 'e7', text: '那天我没有崩溃，只是突然不想解释了。', topicId: 'tired', tags: ['疲惫', '沉默'], ageDays: 45 },
+      { id: 'e8', text: '我把很多事都做完了，却没有觉得轻松一点。', topicId: 'tired', tags: ['疲惫', '释然'], ageDays: 112 },
+      { id: 'e9', text: '有时候停下来，不是放弃，是终于听见自己喘气。', topicId: 'tired', tags: ['疲惫', '喘息'], ageDays: 67 },
+      { id: 'e10', text: '那时候我以为离开会让我变成另一个人。', topicId: 'growth', tags: ['成长', '离开'], ageDays: 178 },
+      { id: 'e11', text: '后来我才知道，长大不是变厉害，是能承认自己也会怕。', topicId: 'growth', tags: ['成长', '害怕'], ageDays: 234 },
+      { id: 'e12', text: '我们好像都是一边学会生活，一边弄丢一些旧答案。', topicId: 'growth', tags: ['成长', '弄丢'], ageDays: 88 },
+      { id: 'e13', text: '有些夜路走多了，会开始觉得城市也有记忆。', topicId: 'city', tags: ['城市', '记忆'], ageDays: 156 },
+      { id: 'e14', text: '我在很晚的地铁里，突然想起一个很早以前的人。', topicId: 'city', tags: ['城市', '深夜'], ageDays: 73 },
+      { id: 'e15', text: '不是这个城市冷，是我有些话不知道该发给谁。', topicId: 'city', tags: ['城市', '无处说'], ageDays: 201 }
+    ];
+
+    const archives = [
+      { topicId: 'homecoming', season: '2026 春', title: '关于归乡的流觞', preface: '这一轮流觞里，很多人没有谈目的地。他们谈起离开后的日常、很久没回去的地方，以及一些仍然跟着自己的旧路。', echoIds: ['e1', 'e2', 'e3'], keywords: ['久别', '远行', '想起以前', '释然'], totalCount: 42 },
+      { topicId: 'oldfriend', season: '2026 春', title: '关于旧友的流觞', preface: '有人提起很久没联系的旧人。不是想念，是突然意识到，有些关系停在了某个时间点，再也没有更新。', echoIds: ['e4', 'e5', 'e6'], keywords: ['怀念', '告别', '天气', '错失'], totalCount: 31 },
+      { topicId: 'tired', season: '2026 春', title: '关于疲惫的流觞', preface: '很多人在这里停下来，不是因为想通了什么，只是终于不需要再解释自己为什么累。', echoIds: ['e7', 'e8', 'e9'], keywords: ['沉默', '喘息', '释然'], totalCount: 28 },
+      { topicId: 'growth', season: '2026 春', title: '关于成长的流觞', preface: '这一轮流觞里没有豪言壮语。人们谈起离开时以为会变成的另一个人，以及后来承认自己也会怕的那个瞬间。', echoIds: ['e10', 'e11', 'e12'], keywords: ['离开', '害怕', '弄丢', '旧答案'], totalCount: 35 },
+      { topicId: 'city', season: '2026 春', title: '关于城市的流觞', preface: '夜路、末班地铁、很晚的便利店。有些城市记忆不在景点里，在那些独自走过的路上。', echoIds: ['e13', 'e14', 'e15'], keywords: ['记忆', '深夜', '无处说'], totalCount: 24 }
+    ];
+
+    // ===== Vue App =====
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          currentTab: 'feed',
+          currentVideoIndex: 0,
+          videos: videos,
+          echoes: echoes,
+          topics: topics,
+          archives: archives,
+          showDebug: false,
+          showGlow: false,
+          showCard: false,
+          showInput: false,
+          currentCard: null,
+          userText: '',
+          collectedCards: [],
+          myEchoes: [],
+          collectedCount: 0,
+          topicVisits: {},
+          selectedTopicId: 'homecoming',
+          touchStartY: 0,
+          dwellSeconds: 0,
+          dwellTimer: null,
+          toastMsg: '',
+          toastVisible: false
+        };
+      },
+      computed: {
+        currentVideo() { return this.videos[this.currentVideoIndex]; },
+        currentArchive() { return this.archives.find(a => a.topicId === this.selectedTopicId); },
+        triggerConfidence() {
+          const topic = this.currentVideo.topicId;
+          const same = this.videos.slice(0, this.currentVideoIndex + 1).filter(v => v.topicId === topic).length;
+          const dwellScore = Math.min(this.dwellSeconds / 15, 1);
+          const topicScore = Math.min(same / 3, 1);
+          return (dwellScore * 0.5 + topicScore * 0.5);
+        },
+        sameTopicCount() {
+          return this.videos.slice(0, this.currentVideoIndex + 1).filter(v => v.topicId === this.currentVideo.topicId).length;
+        }
+      },
+      methods: {
+        onTouchStart(e) { this.touchStartY = e.touches[0].clientY; },
+        onTouchEnd(e) {
+          const diff = this.touchStartY - e.changedTouches[0].clientY;
+          if (diff > 60 && this.currentVideoIndex < this.videos.length - 1) this.nextVideo();
+          else if (diff < -60 && this.currentVideoIndex > 0) this.prevVideo();
+        },
+        nextVideo() { this.currentVideoIndex++; this.resetDwellTimer(); },
+        prevVideo() { this.currentVideoIndex--; this.resetDwellTimer(); },
+        resetDwellTimer() {
+          this.dwellSeconds = 0;
+          clearInterval(this.dwellTimer);
+          this.dwellTimer = setInterval(() => { this.dwellSeconds++; }, 1000);
+        },
+        formatCount(n) { return n >= 10000 ? (n / 10000).toFixed(1) + 'w' : n; },
+        getEcho(id) { return this.echoes.find(e => e.id === id) || {}; },
+        getTopicName(id) { const t = this.topics.find(t => t.id === id); return t ? t.name : ''; },
+        goToTopic(topicId) { this.selectedTopicId = topicId; this.currentTab = 'upstream'; }
+      },
+      mounted() { this.resetDwellTimer(); }
+    }).mount('#app');
+  </script>
+</body>
+</html>
