@@ -222,6 +222,24 @@
     .debug-value { color: var(--accent-water); }
     .debug-enter-active, .debug-leave-active { transition: opacity 0.2s, transform 0.2s; }
     .debug-enter-from, .debug-leave-to { opacity: 0; transform: translateY(-10px); }
+
+    /* ===== Upstream Archive Page ===== */
+    .upstream-page { height: 100%; overflow-y: auto; padding: 20px 20px 80px; }
+    .topic-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
+    .topic-tab { font-size: 13px; color: #9e9890; padding: 6px 16px; border-radius: 16px; cursor: pointer; white-space: nowrap; border: 1px solid #d5d0c8; background: transparent; transition: all 0.2s; }
+    .topic-tab.active { color: #fff; background: var(--accent-water); border-color: var(--accent-water); }
+    .archive-header { margin-bottom: 24px; }
+    .archive-season { font-size: 12px; color: #9e9890; }
+    .archive-title { font-family: var(--font-serif); font-size: 22px; color: #2a2520; margin: 4px 0 12px; }
+    .water-divider { width: 60px; height: 2px; background: var(--accent-water); margin: 12px 0; }
+    .archive-preface { font-size: 14px; color: #6b6560; line-height: 1.8; font-style: italic; }
+    .echo-list { display: flex; flex-direction: column; gap: 0; }
+    .echo-card { padding: 16px 0 16px 14px; border-left: 3px solid var(--accent-water); margin-bottom: 12px; }
+    .echo-text { font-family: var(--font-serif); font-size: 16px; color: #2a2520; line-height: 1.8; }
+    .echo-age { font-size: 11px; color: #9e9890; margin-top: 4px; }
+    .archive-keywords { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+    .keyword-tag { font-size: 12px; color: var(--accent-gold); background: rgba(201,169,110,0.12); padding: 4px 10px; border-radius: 12px; }
+    .seal-badge { text-align: center; padding: 12px; background: rgba(0,0,0,0.04); border-radius: 8px; color: #9e9890; font-size: 13px; margin-top: 16px; }
   </style>
 </head>
 <body>
@@ -337,7 +355,36 @@
 
     <!-- ===== Page: Upstream ===== -->
     <div class="page page-upstream" v-show="currentTab === 'upstream'">
-      <!-- Task 2 填充: 回声流 + 主题选择 -->
+      <div class="upstream-page">
+        <div class="upstream-content" v-if="currentArchive">
+          <!-- 主题切换 -->
+          <div class="topic-tabs">
+            <span class="topic-tab" v-for="t in topics" :key="t.id"
+                  :class="{ active: selectedTopicId === t.id }"
+                  @click="selectedTopicId = t.id">{{ t.name }}</span>
+          </div>
+          <!-- 档案头 -->
+          <div class="archive-header">
+            <div class="archive-season">{{ currentArchive.season }}</div>
+            <div class="archive-title">{{ currentArchive.title }}</div>
+            <div class="water-divider"></div>
+            <div class="archive-preface">{{ currentArchive.preface }}</div>
+          </div>
+          <!-- 回响列表 -->
+          <div class="echo-list">
+            <div class="echo-card" v-for="echoId in currentArchive.echoIds" :key="echoId">
+              <div class="echo-text">"{{ getEcho(echoId).text }}"</div>
+              <div class="echo-age">来自 {{ getEcho(echoId).ageDays }} 天前</div>
+            </div>
+          </div>
+          <!-- 关键词 -->
+          <div class="archive-keywords">
+            <span class="keyword-tag" v-for="kw in currentArchive.keywords" :key="kw">#{{ kw }}</span>
+          </div>
+          <!-- 封存徽章 -->
+          <div class="seal-badge">已封存 · 共 {{ currentArchive.totalCount }} 条</div>
+        </div>
+      </div>
     </div>
 
     <!-- ===== Page: Mine ===== -->
