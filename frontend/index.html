@@ -209,6 +209,19 @@
     .expand-enter-from, .expand-leave-to { max-height: 0; opacity: 0; }
     .toast-enter-active, .toast-leave-active { transition: opacity 0.3s; }
     .toast-enter-from, .toast-leave-to { opacity: 0; }
+
+    /* ===== Debug Panel ===== */
+    .debug-panel {
+      position: absolute; top: 60px; right: 12px;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-radius: 8px; padding: 12px 14px; z-index: 30;
+      font-size: 12px; font-family: monospace; min-width: 160px;
+    }
+    .debug-row { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+    .debug-label { color: rgba(255,255,255,0.5); }
+    .debug-value { color: var(--accent-water); }
+    .debug-enter-active, .debug-leave-active { transition: opacity 0.2s, transform 0.2s; }
+    .debug-enter-from, .debug-leave-to { opacity: 0; transform: translateY(-10px); }
   </style>
 </head>
 <body>
@@ -270,6 +283,28 @@
           <span class="tag" v-for="tag in currentVideo.tags">#{{ tag }}</span>
         </div>
       </div>
+
+      <!-- Debug Panel -->
+      <transition name="debug">
+        <div class="debug-panel" v-if="showDebug && currentTab === 'feed'">
+          <div class="debug-row">
+            <span class="debug-label">当前标签</span>
+            <span class="debug-value">{{ currentVideo.tags.join(', ') }}</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">停留秒数</span>
+            <span class="debug-value">{{ dwellSeconds }}s</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">触发置信度</span>
+            <span class="debug-value">{{ triggerConfidence.toFixed(2) }}</span>
+          </div>
+          <div class="debug-row">
+            <span class="debug-label">同主题累计</span>
+            <span class="debug-value">{{ sameTopicCount }}</span>
+          </div>
+        </div>
+      </transition>
 
       <!-- Card Glow -->
       <div class="card-glow" v-if="showGlow && !showCard"></div>
