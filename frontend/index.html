@@ -124,7 +124,7 @@
     /* ===== Video Area ===== */
     .video-area {
       position: absolute; inset: 0;
-      transition: background 0.6s ease;
+      transition: background 0.6s ease, filter 0.6s ease;
     }
     .video-watermark {
       font-family: var(--font-serif); font-size: 24px;
@@ -156,42 +156,111 @@
 
     /* ===== Card Glow ===== */
     .card-glow {
-      position: absolute; bottom: 120px; left: 0; right: 0;
-      height: 80px; background: var(--accent-glow);
-      z-index: 15; animation: glowPulse 4s ease-in-out infinite;
+      position: absolute; bottom: 72px; left: 0; right: 0;
+      height: 120px; z-index: 15;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(90,158,143,0.2), rgba(90,158,143,0.05) 60%, transparent 100%);
+      animation: glowPulse 4s ease-in-out infinite;
     }
 
     /* ===== Flow Card ===== */
     .flow-card {
       position: absolute; bottom: 72px; left: 24px; right: 24px;
-      max-height: 60vh; padding: 24px 20px;
-      background: var(--card-paper);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      max-height: 60vh; padding: 28px 22px 24px;
+      background: rgba(245, 240, 230, 0.18);
+      backdrop-filter: blur(24px) brightness(1.15) saturate(0.7);
+      -webkit-backdrop-filter: blur(24px) brightness(1.15) saturate(0.7);
+      border: 1px solid rgba(245, 240, 230, 0.12);
       border-radius: 16px; z-index: 20;
-      display: flex; flex-direction: column; gap: 12px;
+      box-shadow:
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+        inset 0 -1px 0 0 rgba(0, 0, 0, 0.15),
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 2px 8px rgba(0, 0, 0, 0.3);
+      display: flex; flex-direction: column; gap: 0;
     }
-    .card-header { text-align: center; }
-    .card-title { font-size: 14px; color: var(--accent-gold); font-weight: 500; }
-    .card-subtitle { font-size: 12px; color: var(--ink-secondary); margin-top: 2px; }
-    .card-echo { font-family: var(--font-serif); font-size: 20px; line-height: 1.8; color: var(--ink-primary); text-align: center; padding: 8px 0; }
-    .card-source { font-size: 11px; color: var(--accent-gold); text-align: center; }
-    .card-actions { display: flex; gap: 12px; justify-content: center; margin-top: 4px; }
-    .btn-collect { padding: 8px 20px; background: var(--accent-water); color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
-    .btn-leave { padding: 8px 20px; background: transparent; color: var(--accent-water); border: 1.5px solid var(--accent-water); border-radius: 8px; font-size: 14px; cursor: pointer; }
-    .btn-dismiss { padding: 8px 12px; background: transparent; color: var(--ink-secondary); border: none; font-size: 13px; cursor: pointer; }
+    .card-header { text-align: center; margin-bottom: 18px; }
+    .card-title { font-size: 13px; color: #d4b478; font-weight: 600; letter-spacing: 0.08em; text-align: center; opacity: 0.85; }
+    .card-subtitle { font-size: 12px; color: var(--ink-secondary); margin-top: 3px; letter-spacing: 0.02em; text-align: center; }
+    .card-echo {
+      font-family: var(--font-serif); font-size: 21px; font-weight: 600;
+      line-height: 1.9; color: #f0ead8; text-align: center;
+      padding: 14px 8px; letter-spacing: 0.05em;
+      text-shadow: 0 0 30px rgba(232,224,208,0.15);
+      margin-bottom: 18px; position: relative;
+    }
+    .card-echo::before {
+      content: '\201C'; position: absolute; left: -6px; top: 0;
+      font-size: 32px; color: #d4b478; opacity: 0.35; line-height: 1;
+    }
+    .card-echo::after {
+      content: '\201D'; position: absolute; right: -6px; bottom: 0;
+      font-size: 32px; color: #d4b478; opacity: 0.35; line-height: 1;
+    }
+    .card-source {
+      font-size: 11px; color: var(--ink-secondary);
+      text-align: center; letter-spacing: 0.04em;
+      opacity: 0.85; margin-bottom: 22px;
+    }
+    .card-actions {
+      display: flex; gap: 10px; justify-content: center;
+      align-items: center;
+    }
+    .btn-collect {
+      padding: 10px 28px; background: var(--accent-water); color: #fff;
+      border: none; border-radius: 10px; font-size: 15px; font-weight: 500;
+      cursor: pointer; min-width: 80px;
+      transition: transform 150ms cubic-bezier(0.2,0,0,1), box-shadow 150ms ease, background 200ms ease;
+    }
+    .btn-collect:hover { background: #4d8a7d; box-shadow: 0 2px 12px rgba(90,158,143,0.35); }
+    .btn-collect:active { transform: scale(0.95); box-shadow: 0 0 4px rgba(90,158,143,0.2); transition-duration: 80ms; }
+    .btn-collect:focus-visible { outline: 2px solid var(--accent-water); outline-offset: 3px; }
+    .btn-leave {
+      padding: 10px 20px; background: transparent; color: var(--accent-water);
+      border: 1.5px solid rgba(90,158,143,0.5); border-radius: 10px;
+      font-size: 14px; cursor: pointer;
+      transition: transform 150ms cubic-bezier(0.2,0,0,1), background 200ms ease;
+    }
+    .btn-leave:hover { background: rgba(90,158,143,0.1); }
+    .btn-leave:active { transform: scale(0.95); background: rgba(90,158,143,0.18); transition-duration: 80ms; }
+    .btn-leave:focus-visible { outline: 2px solid var(--accent-water); outline-offset: 3px; }
+    .btn-dismiss {
+      padding: 10px 14px; background: transparent; color: var(--ink-secondary);
+      border: none; font-size: 12px; cursor: pointer; position: relative;
+      transition: color 200ms ease;
+    }
+    .btn-dismiss::after {
+      content: ''; position: absolute; bottom: 4px; left: 14px; right: 14px;
+      height: 1px; background: var(--ink-secondary);
+      transform: scaleX(0); transform-origin: center;
+      transition: transform 250ms cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-dismiss:hover { color: var(--ink-primary); }
+    .btn-dismiss:hover::after { transform: scaleX(1); }
+    .btn-dismiss:active { color: var(--accent-water); transition-duration: 80ms; }
 
     /* ===== Card Input Area ===== */
     .card-input-area { display: flex; flex-direction: column; gap: 8px; }
     .card-input-area textarea {
       width: 100%; height: 80px; padding: 10px;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
-      color: var(--ink-primary); font-size: 14px; font-family: var(--font-sans); resize: none;
+      background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; color: var(--ink-primary); font-size: 14px;
+      font-family: var(--font-sans); resize: none;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+    .card-input-area textarea:focus {
+      outline: none; border-color: var(--accent-water);
+      box-shadow: 0 0 0 3px rgba(90,158,143,0.15);
     }
     .card-input-area textarea::placeholder { color: var(--ink-secondary); }
     .char-count { font-size: 12px; color: var(--ink-secondary); text-align: right; }
     .char-count.warning { color: var(--accent-gold); }
-    .btn-submit { padding: 10px; background: var(--accent-water); color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .btn-submit {
+      padding: 10px; background: var(--accent-water); color: #fff;
+      border: none; border-radius: 8px; font-size: 14px; cursor: pointer;
+      transition: transform 150ms cubic-bezier(0.2,0,0,1), box-shadow 150ms ease;
+    }
+    .btn-submit:hover { box-shadow: 0 2px 12px rgba(90,158,143,0.35); }
+    .btn-submit:active { transform: scale(0.97); transition-duration: 80ms; }
 
     /* ===== Toast ===== */
     .toast {
@@ -201,15 +270,35 @@
     }
 
     /* ===== Animations ===== */
-    @keyframes glowPulse { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.2; } }
-    .card-enter-active { animation: cardFloatIn 800ms ease-out; }
-    .card-leave-active { animation: cardFloatOut 600ms ease-in; }
-    @keyframes cardFloatIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes cardFloatOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
-    .expand-enter-active, .expand-leave-active { transition: max-height 0.4s ease, opacity 0.3s ease; max-height: 200px; overflow: hidden; }
+    @keyframes glowPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .card-enter-active { animation: cardFloatIn 900ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .card-leave-active { animation: cardFloatOut 700ms cubic-bezier(0.55, 0, 0.55, 0.73); }
+    @keyframes cardFloatIn {
+      0% { transform: translateY(100%) scale(0.95); opacity: 0; }
+      60% { opacity: 1; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    @keyframes cardFloatOut {
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(30%) scale(0.96); opacity: 0; }
+    }
+    .echo-reveal {
+      animation: echoWash 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 500ms both;
+    }
+    @keyframes echoWash {
+      from { clip-path: inset(0 100% 0 0); }
+      to { clip-path: inset(0 0% 0 0); }
+    }
+    .expand-enter-active { transition: max-height 350ms cubic-bezier(0.16,1,0.3,1), opacity 300ms ease; max-height: 200px; overflow: hidden; }
     .expand-enter-from, .expand-leave-to { max-height: 0; opacity: 0; }
-    .toast-enter-active, .toast-leave-active { transition: opacity 0.3s; }
-    .toast-enter-from, .toast-leave-to { opacity: 0; }
+    .actions-fade-leave-active { transition: opacity 250ms ease, transform 250ms ease; }
+    .actions-fade-leave-to { opacity: 0; transform: translateY(-8px); }
+    .toast-enter-active { transition: opacity 300ms cubic-bezier(0.16,1,0.3,1), transform 300ms cubic-bezier(0.16,1,0.3,1); }
+    .toast-leave-active { transition: opacity 250ms ease, transform 250ms ease; }
+    .toast-enter-from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    .toast-leave-to { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+    .badge-bounce { animation: badgePop 400ms cubic-bezier(0.17,0.89,0.32,1.3); }
+    @keyframes badgePop { 0% { transform: scale(1); } 40% { transform: scale(1.4); } 100% { transform: scale(1); } }
 
     /* ===== Debug Panel ===== */
     .debug-panel {
@@ -277,8 +366,7 @@
 
     /* ===== Video Dimmed When Card Shows ===== */
     .video-area.dimmed {
-      filter: brightness(0.5);
-      transition: filter 0.6s ease;
+      filter: brightness(0.4) saturate(0.5);
     }
 
     /* ===== Swipe Hint ===== */
@@ -395,7 +483,7 @@
             <div class="card-title">{{ currentCard.title }}</div>
             <div class="card-subtitle">{{ currentCard.subtitle }}</div>
           </div>
-          <div class="card-echo">"{{ currentCard.echoText }}"</div>
+          <div class="card-echo" :class="{ 'echo-reveal': echoRevealing }">{{ currentCard.echoText }}</div>
           <div class="card-source">{{ currentCard.sourceLine }}</div>
           <transition name="expand">
             <div class="card-input-area" v-if="showInput">
@@ -404,11 +492,13 @@
               <button class="btn-submit" @click="submitEcho">放下这句</button>
             </div>
           </transition>
-          <div class="card-actions" v-if="!showInput">
-            <button class="btn-collect" @click="collectCard">收下</button>
-            <button class="btn-leave" @click="showInput = true">留一句</button>
-            <button class="btn-dismiss" @click="dismissCard">继续刷</button>
-          </div>
+          <transition name="actions-fade">
+            <div class="card-actions" v-if="!showInput">
+              <button class="btn-collect" @click="collectCard">收下</button>
+              <button class="btn-leave" @click="showInput = true">留一句</button>
+              <button class="btn-dismiss" @click="dismissCard">继续刷</button>
+            </div>
+          </transition>
         </div>
       </transition>
 
@@ -603,7 +693,9 @@
           dwellTimer: null,
           toastMsg: '',
           toastVisible: false,
-          showSwipeHint: true
+          showSwipeHint: true,
+          echoRevealing: false,
+          cardCooldown: false
         };
       },
       computed: {
@@ -643,7 +735,7 @@
         getTopicName(id) { const t = this.topics.find(t => t.id === id); return t ? t.name : ''; },
         goToTopic(topicId) { this.selectedTopicId = topicId; this.currentTab = 'upstream'; },
         checkTrigger() {
-          if (this.showCard) return;
+          if (this.showCard || this.cardCooldown) return;
           const topic = this.currentVideo.topicId;
           const sameTopicViewed = this.videos.slice(0, this.currentVideoIndex + 1).filter(v => v.topicId === topic).length;
           if (this.dwellSeconds >= 8 && sameTopicViewed >= 2) {
@@ -663,15 +755,44 @@
             tags: echo.tags
           };
           this.showGlow = true;
-          setTimeout(() => { this.showCard = true; }, 400);
+          this.echoRevealing = false;
+          setTimeout(() => {
+            this.showCard = true;
+            this.$nextTick(() => { this.echoRevealing = true; });
+          }, 800);
+          setTimeout(() => { this.showGlow = false; }, 1400);
         },
         collectCard() {
+          const card = this.$el.querySelector('.flow-card');
+          if (card) {
+            const cardRect = card.getBoundingClientRect();
+            setTimeout(() => {
+              const tabBadge = this.$el.querySelector('.tab-item:first-child .badge');
+              if (!tabBadge) return;
+              const targetRect = tabBadge.getBoundingClientRect();
+              const particle = document.createElement('div');
+              particle.style.cssText = 'position:fixed;width:12px;height:12px;border-radius:50%;background:var(--accent-water);box-shadow:0 0 16px rgba(90,158,143,0.6);z-index:200;pointer-events:none;left:' + (cardRect.left + cardRect.width/2 - 6) + 'px;top:' + (cardRect.top + cardRect.height/2 - 6) + 'px;';
+              document.body.appendChild(particle);
+              particle.animate([
+                { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                { transform: 'translate(' + (targetRect.left - cardRect.left - cardRect.width/2 + 6) + 'px,' + (targetRect.top - cardRect.top - cardRect.height/2 + 6) + 'px) scale(0.3)', opacity: 0 }
+              ], { duration: 500, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'forwards' });
+              setTimeout(() => particle.remove(), 500);
+            }, 200);
+          }
           this.collectedCards.push({ ...this.currentCard, collectedAt: '刚刚' });
           const topic = this.currentCard.topicId;
           this.topicVisits[topic] = (this.topicVisits[topic] || 0) + 1;
           this.collectedCount++;
-          this.dismissCard();
-          this.showToast('已收下');
+          this.$nextTick(() => {
+            const badge = this.$el.querySelector('.tab-item:first-child .badge');
+            if (badge) {
+              badge.classList.remove('badge-bounce');
+              void badge.offsetWidth;
+              badge.classList.add('badge-bounce');
+            }
+          });
+          setTimeout(() => { this.dismissCard(); this.showToast('已收下'); }, 400);
         },
         submitEcho() {
           if (!this.userText.trim()) return;
@@ -684,8 +805,11 @@
           this.showCard = false;
           this.showGlow = false;
           this.showInput = false;
+          this.echoRevealing = false;
           this.currentCard = null;
           this.resetDwellTimer();
+          this.cardCooldown = true;
+          setTimeout(() => { this.cardCooldown = false; }, 5000);
         },
         showToast(msg) {
           this.toastMsg = msg;
