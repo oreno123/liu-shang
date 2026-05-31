@@ -299,7 +299,8 @@
 
     <!-- ===== Page: Feed ===== -->
     <div class="page page-feed" v-show="currentTab === 'feed'"
-         @touchstart="onTouchStart" @touchend="onTouchEnd">
+         @touchstart="onTouchStart" @touchend="onTouchEnd"
+         @wheel.prevent="onWheel">
 
       <!-- Feed Header -->
       <header class="feed-header">
@@ -621,6 +622,10 @@
       },
       methods: {
         onTouchStart(e) { this.touchStartY = e.touches[0].clientY; },
+        onWheel(e) {
+          if (e.deltaY > 30 && this.currentVideoIndex < this.videos.length - 1) this.nextVideo();
+          else if (e.deltaY < -30 && this.currentVideoIndex > 0) this.prevVideo();
+        },
         onTouchEnd(e) {
           const diff = this.touchStartY - e.changedTouches[0].clientY;
           if (diff > 60 && this.currentVideoIndex < this.videos.length - 1) this.nextVideo();
@@ -691,6 +696,11 @@
       mounted() {
         this.resetDwellTimer();
         setTimeout(() => { this.showSwipeHint = false; }, 3000);
+        document.addEventListener('keydown', (e) => {
+          if (this.currentTab !== 'feed') return;
+          if (e.key === 'ArrowDown' && this.currentVideoIndex < this.videos.length - 1) this.nextVideo();
+          else if (e.key === 'ArrowUp' && this.currentVideoIndex > 0) this.prevVideo();
+        });
       }
     }).mount('#app');
   </script>
